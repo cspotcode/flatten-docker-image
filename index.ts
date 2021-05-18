@@ -1,10 +1,37 @@
+#!/usr/bin/env ts-node-transpile-only
 type TODO = unknown;
 
 import fs from 'fs';
 import Path from 'path';
 import execa from 'execa';
+import {Cli, Builtins, Command, Usage, BaseContext, Option} from 'clipanion';
+
+function main() {
+    const [node, app, ...args] = process.argv;
+    const cli = new Cli({
+        binaryName: require('./package.json').name,
+        binaryVersion: require('./package.json').version
+    });
+    cli.register(FlattenImageCommand);
+    cli.register(Builtins.HelpCommand);
+    cli.register(Builtins.VersionCommand);
+    cli.runExit(args, Cli.defaultContext);
+}
 
 const supportedDockerfileCommands = 'CMD|ENTRYPOINT|ENV|EXPOSE|ONBUILD|USER|VOLUME|WORKDIR';
+
+class FlattenImageCommand extends Command {
+    static paths = [Command.Default];
+    static usage: Usage = {
+        description: 'Flatten a docker image into a new image with a single layer, copying metadata such as entrypoint and env vars.'
+    }
+
+    image = Option.String();
+
+    async execute() {
+        this.context.stdout.write(`TODO flatten this image: ${ this.image }\n`);
+    }
+}
 
 type DockerInspectOutput = [DockerInspectStruct];
 interface DockerInspectStruct {
@@ -47,6 +74,4 @@ function buildDockerImportChangeFlags(dockerInspectOutput: DockerInspectOutput) 
     return flags;
 }
 
-function main() {
-    execa
-}
+main();

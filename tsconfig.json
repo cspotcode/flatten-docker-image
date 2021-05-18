@@ -1,0 +1,7 @@
+{
+    "extends": "@tsconfig/node12",
+    "ts-node": {
+        "transpileOnly": true,
+        "skipIgnore": true
+    }
+}
