@@ -1,5 +1,6 @@
 {
     "name": "flatten-docker-image",
+    "version": "0.0.1",
     "bin": "./index.ts",
     "dependencies": {
         "@tsconfig/node12": "^1.0.7",
