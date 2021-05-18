@@ -3,5 +3,8 @@
     "ts-node": {
         "transpileOnly": true,
         "skipIgnore": true
+    },
+    "compilerOptions": {
+        "esModuleInterop": true
     }
 }
