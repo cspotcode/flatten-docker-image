@@ -36,15 +36,18 @@ class FlattenImageCommand extends Command {
 
     image = Option.String();
     tag = Option.String('-t,--tag');
+    quiet = Option.Boolean('-q,--quiet', {
+        description: 'Suppress informational logging.'
+    });
 
     console!: Console;
 
     async execute() {
         this.console = new Console(this.context.stdout, this.context.stderr);
-        const {console, image, tag} = this;
+        const {console, image, tag, quiet} = this;
         const {default: shq} = await shqModulePromise;
         const cleanupTasks: Array<() => void | Promise<void>> = [];
-        const log = console.error.bind(console);
+        const log = quiet ? (...args: any[]) => {} : console.error.bind(console);
         try {
             log(`Inspecting docker image ${image}...`);
             const [result] = await Promise.allSettled([execa('docker', ['image', 'inspect', image], {
@@ -91,6 +94,7 @@ class FlattenImageCommand extends Command {
                 await execa('docker', ['image', 'tag', flattenedImageId, tag], {stdio: 'inherit'});
                 log(`Tagged image as ${tag}`);
             }
+            console.log(flattenedImageId);
         } finally {
             for(const task of cleanupTasks) {
                 await task();
@@ -128,7 +132,7 @@ function buildDockerImportChangeFlags(dockerInspect: DockerInspectStruct) {
         throw new Error('unsupported fields encountered');
     }
     if(Cmd) addChange(`CMD ${ JSON.stringify(Cmd) }`);
-    if(Entrypoint) addChange(`ENTRYPOINT ${ JSON.stringify(WorkingDir) }`);
+    if(Entrypoint) addChange(`ENTRYPOINT ${ JSON.stringify(Entrypoint) }`);
     if(WorkingDir) addChange(`WORKDIR ${ JSON.stringify(WorkingDir) }`);
     if(Env) {
         for(const env of Env) {
