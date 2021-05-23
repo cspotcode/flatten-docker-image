@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node-script
+#!/usr/bin/env ts-node
 type TODO = unknown;
 
 import fs from 'fs';
