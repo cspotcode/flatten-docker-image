@@ -1,6 +1,7 @@
 {
     "extends": "ts-node/node12/tsconfig.json",
     "ts-node": {
-        "skipIgnore": true
+        "skipIgnore": true,
+        "transpileOnly": true
     }
 }
