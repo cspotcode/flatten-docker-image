@@ -1,7 +1,7 @@
 {
     "name": "flatten-docker-image",
     "version": "0.0.1",
-    "bin": "./index.ts",
+    "bin": "./bin.js",
     "dependencies": {
         "clipanion": "3.0.0-rc.12",
         "execa": "^5.0.0",
